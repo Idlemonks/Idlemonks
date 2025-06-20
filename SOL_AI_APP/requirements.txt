@@ -1,0 +1,20 @@
+#Yet to install any of these requirement into my project
+# Would only do that in a stablize enviroment
+#No delete even after committing 
+
+openai
+langchain
+streamlit
+whisper
+speechrecognition
+pyttsx3
+soundfile
+streamlit_audio_recorder
+crewai
+fastapi
+uvicorn
+pydub
+python_dotenv
+requests 
+elevenlabs 
+# Additional libraries that might be useful
