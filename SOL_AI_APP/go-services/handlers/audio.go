@@ -29,7 +29,7 @@ func UploadAudio(w http.ResponseWriter, r *http.Request) {
 
 	_, err = io.Copy(outFile, file)
 	if err != nil {
-		http.Error(w, "Failed to save audio", http,StatusInternalServerError)
+		http.Error(w, "Failed to save audio", http.StatusInternalServerError)
 		return
 	}
 
@@ -47,9 +47,12 @@ func UploadAudio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	duration, err := decoder.Duration()
+	if err != nil {
+		http.Error(w, "Failed to get duration", http.StatusInternalServerError)
+		return
+	}
 	fmt.Fprintf(w, "Sample rate: %d Hz, Duration: ~%.2f seconds", 
-		decoder.SampleRate, float64(decoder.SampleCount)/float64(decoder.SampleRate))
-
-
-
+		decoder.SampleRate, duration.Seconds())
 		
+}

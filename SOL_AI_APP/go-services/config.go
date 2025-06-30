@@ -8,11 +8,13 @@ import (
 type Config struct {
 	TTSProvider string
 	STTProvider string 
+	GoogleTTSAPIKey string
+	WhisperSTTModelPath string
 }
 
 func LoadConfig() Config{
 	return Config{
-		TTSProvider: os.Getenv("TTS_PROVIDER"), // e.g., "google"
-		STTProvider: os.Getenv("STT_PROVIDER"), '' e.g., "whisper"
+		TTSProvider: os.Getenv("TTSProvider"), // e.g., "google"
+		STTProvider: os.Getenv("STTProvider"), // e.g., "whisper"
 	}
 }

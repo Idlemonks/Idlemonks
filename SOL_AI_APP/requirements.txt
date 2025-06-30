@@ -9,7 +9,6 @@ whisper
 speechrecognition
 pyttsx3
 soundfile
-streamlit_audio_recorder
 crewai
 fastapi
 uvicorn

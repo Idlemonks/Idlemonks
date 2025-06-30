@@ -4,41 +4,39 @@ import (
 	"fmt"
 	"net/http"
 	"log"
-	"sol-go/handlers"
 	"os"
-	"./stt"
-	"./tts"
+	"sol-go/stt"
+	"sol-go/tts"
 )
 // Global variables for TTS and STT engines 
 var ttsEngine tts.TTS 
-var sttEngine stt.stt
+var sttEngine stt.STT
 
 
 func main() {
 	// LOAD CONFIG FROM ENVIROMENT VARIABLES
-	os. Setenv("TTS_PROVIDER", "google")
+	os.Setenv("TTS_PROVIDER", "google")
 	os.Setenv("STT_PROVIDER", "whisper")
 	cfg := LoadConfig()
 
 	// Initialize TTS ENGINE
-	switch cfg.TTS_PROVIDER{
+	switch cfg.TTSProvider {
 	case "google":
-		ttsEngine = tts.NewGoogleTTS(cfg.GoogleTTSAPIKey)	
+		ttsEngine = tts.NewGoogleTTS()
 	default:
-		log.Fatalf("Unsupported TTS provider: %s", cfg.TTS_PROVIDER)
+		log.Fatalf("Unsupported TTS provider: %s", cfg.TTSProvider)
 	}
 
 	// Initialize STT ENGINE
-	switch cfg.STT_PROVIDER {
+	switch cfg.STTProvider {
 	case "whisper":
-		sttEngine = stt.NewWhisperSTT(cfg.WhisperModelPath)
+		sttEngine = stt.NewWhisperSTT()
 	default:
-		log.Fatalf("Unsupported STT provider: %s", cfg.STT_PROVIDER)
+		log.Fatalf("Unsupported STT provider: %s", cfg.STTProvider)
 	}
 
 	// Set up HTTP handlers
-
-	http.HandleFunc("/upload_audio", handlers.UploadAudio)
+	http.HandleFunc("/upload_audio", UploadAudio)
 	log.Println("Go audio service listening on port 8081...")
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
@@ -50,9 +48,9 @@ func UploadAudio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Read audio from multipart from field "audio"
+	// Read audio from multipart form field "audio"
 	file, _, err := r.FormFile("audio")
-	if err != nill {
+	if err != nil {
 		http.Error(w, "Failed to read audio file: "+err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -60,11 +58,12 @@ func UploadAudio(w http.ResponseWriter, r *http.Request) {
 
 	audioData := make([]byte, r.ContentLength)
 	_, err = file.Read(audioData)
-	http.Error{w, "failed to read audio content: " + err.Error(), http.StatusBadRequest	}
-	return
+	if err != nil {
+		http.Error(w, "failed to read audio content: "+err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	Transcribe using STT engine
+	// Transcribe using STT engine
 	transcribedText, err := sttEngine.Transcribe(audioData)
 	if err != nil {
 		http.Error(w, "Transcription failed: "+err.Error(), http.StatusInternalServerError)
@@ -72,8 +71,7 @@ func UploadAudio(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Respond with transcribed text
-	w.Header(.Set("Content-Type", "application/json")
-	fmt.Fprint(w,'{"transcription": "%s"}',transcribedText)
-	
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, `{"transcription": "%s"}`, transcribedText)
 }
 

@@ -6,7 +6,7 @@ import "fmt"
 type WhisperSTT struct{}
 
 func NewWhisperSTT() *WhisperSTT{
-	return &Whisper{}
+	return &WhisperSTT{}
 }
 
 func (w *WhisperSTT) Transcribe(audio []byte) (string, error) {
