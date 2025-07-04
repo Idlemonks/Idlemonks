@@ -17,3 +17,6 @@ python_dotenv
 requests 
 elevenlabs 
 # Additional libraries that might be useful
+
+
+
