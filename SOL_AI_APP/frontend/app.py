@@ -1,23 +1,32 @@
-import streamlit as st
+
 import requests
 import tempfile
+import streamlit as st
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
 
-st.set_page_config("🎤 ELDA", layout="centered")
-st.title("🎙️ Talk to ELDA")
+st.set_page_config("🎙️ ELDA - Voice Input", layout="centered")
+st.title("🎤 Talk to ELDA")
 
-audio_bytes = st.audio_recorder("🎤 Record Your Voice", format="wav")
+st.info("Click start to record audio using your mic.")
 
-if audio_bytes:
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-        f.write(audio_bytes)
-        f_path = f.name
+webrtc_ctx = webrtc_streamer(
+    key="audio",
+    mode=WebRtcMode.SENDONLY,
+    client_settings=ClientSettings(
+        media_stream_constraints={"audio": True, "video": False},
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    ),
+)
 
-    st.info("⌛ Sending to agent...")
+if webrtc_ctx.audio_receiver:
+    import av
+    import numpy as np
 
-    with open(f_path, "rb") as audio_file:
-        response = requests.post(
-            "http://localhost:8000/process_audio/",
-            files={"file": audio_file}
-        )
+    st.success("Receiving audio...")
 
-    st.audio(response.content)
+    # Collect and process audio frames
+    audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
+    for audio_frame in audio_frames:
+        samples = audio_frame.to_ndarray()
+        st.write(f"Audio samples received: {samples.shape}")
+

@@ -15,8 +15,8 @@ var sttEngine stt.STT
 
 func main() {
 	// LOAD CONFIG FROM ENVIROMENT VARIABLES
-	os.Setenv("TTS_PROVIDER", "google")
-	os.Setenv("STT_PROVIDER", "whisper")
+	os.Setenv("TTSProvider", "google")
+	os.Setenv("STTProvider", "whisper")
 	cfg := LoadConfig()
 
 	// Initialize TTS ENGINE
