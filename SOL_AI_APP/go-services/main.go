@@ -12,6 +12,7 @@ import (
 var ttsEngine tts.TTS 
 var sttEngine stt.STT
 
+// integrate a web framework called FIBER to handle routes cleanly
 
 func main() {
 	// LOAD CONFIG FROM ENVIROMENT VARIABLES

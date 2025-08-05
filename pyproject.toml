@@ -1,0 +1,4 @@
+# This tells pip to use the setuptools build bckend, which supports PEP517
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

@@ -3,6 +3,8 @@ import requests
 import tempfile
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
+import av
+import numpy as np
 
 st.set_page_config("🎙️ ELDA - Voice Input", layout="centered")
 st.title("🎤 Talk to ELDA")
@@ -19,8 +21,6 @@ webrtc_ctx = webrtc_streamer(
 )
 
 if webrtc_ctx.audio_receiver:
-    import av
-    import numpy as np
 
     st.success("Receiving audio...")
 
