@@ -208,12 +208,12 @@ class GoalTracker:
             }
 # Example usage:
 if __name__ == "__main__":
-    tracker = GoalTracker()
-    print(tracker.add_goal("Learn Python", "2024-12-31", user_id="user123", priority=2))
-    print(tracker.update_progress("goal_241231123456-user123", 50, "user123"))
-    print(tracker.get_progress_update())
-    print(tracker.get_analytics())
-    tracker.archive_incomplete_goals()
+    goal_tracker = GoalTracker()
+    print(goal_tracker.add_goal("Learn Python", "2024-12-31", user_id="user123", priority=2))
+    print(goal_tracker.update_progress("goal_241231123456-user123", 50, "user123"))
+    print(goal_tracker.get_progress_update())
+    print(goal_tracker.get_analytics())
+    goal_tracker.archive_incomplete_goals()
     
     
 
