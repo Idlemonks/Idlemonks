@@ -83,8 +83,7 @@ class GoalTracker:
         return client
 
 
-    def add_goal(self, description: str, target_date: str, user_id: str = "personal",
-                 priority: int =1, progress: float = 0.0, collaborators: List[str] = None) -> str:
+    def add_goal(self, description: str, target_date: str, user_id: str = "personal",priority: int =1, progress: float = 0.0, collaborators: List[str] = None) -> str:
         """ Add a goal with collaboration and vector storage."""
         goal_id = f" goal_{datetime.now().strftime('%y%m%d%H%M%S')}-{user_id}"
         with sqlite3.connect(self.db_path) as conn:
@@ -93,7 +92,7 @@ class GoalTracker:
             INSERT INTO goals (is, user_id, description, category,priority,target_date, progress, created_at, last_updated, collaborators)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)  
         """,  (goal_id, user_id. description, category, priority, target_date, progress,
-                          datetime.now().isoformat(), datetime.now().isoformat(), json.dumps(collaborators or [])))
+                datetime.now().isoformat(), datetime.now().isoformat(), json.dumps(collaborators or [])))
             conn.commit()
 
         self.vector_store.add_texts([f" {description} for {user_id} at {target_date}"])
@@ -130,8 +129,8 @@ class GoalTracker:
                 raise ValueError (f"Goal {goal_id} is {status}, cannot update progress.")
             new_progress = min(max(progress, 0.0), 100.0)
             cursor.execute("""
-             UPDATE goals SET progress = ?, last_updated = ? WHERE id = ? 
-             """, (new_progress, datetime.now().isoformat(), goal_id))
+            UPDATE goals SET progress = ?, last_updated = ? WHERE id = ? 
+            """, (new_progress, datetime.now().isoformat(), goal_id))
             conn.commit()
             self.memory.chat_memory.add_ai_message(f" Progress for {goal_id} updated to {new_progress}%")
             self._learn_from_update(goal_id, new_progress)
@@ -215,3 +214,6 @@ if __name__ == "__main__":
     print(tracker.get_progress_update())
     print(tracker.get_analytics())
     tracker.archive_incomplete_goals()
+    
+    
+

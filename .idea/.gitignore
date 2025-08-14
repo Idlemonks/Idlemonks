@@ -3,3 +3,8 @@
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
