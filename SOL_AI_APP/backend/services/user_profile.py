@@ -1,11 +1,9 @@
-from fastapi import WebSocket, APIRouter
+from fastapi import FastAPI, WebSocket
 
-router = APIRouter()
+app = FastAPI()
 
-@router.websocket("/ws")
+@app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    #forward to STT service or queue
     await websocket.accept()
-    while True:
-        data = await websocket.receive_bytes()
-        #forward to STT service or queue
-        Await websocket.send_text("Audio Received")
+    await websocket.send_text("Audio Received")

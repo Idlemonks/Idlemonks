@@ -96,8 +96,8 @@ class BaseService(ABC):
 class GoalTrackerService(BaseService):
     """Goal tracking microservice with CrewAI integration"""
     
-    def __init__(self, goal_tracker: GoalTracker, user_id: str):
-        super().__init__("goal_tracker", goal_tracker, user_id)
+    def __init__(self, goal_tracker, GoalTracker, user_id: str):
+        super().__init__("goal_tracker", GoalTracker, user_id)
         self.priority = 10  # Higher priority - more specific commands
     
     def get_command_triggers(self) -> List[str]:
@@ -203,8 +203,8 @@ class GoalTrackerService(BaseService):
 class HabitTrackerService(BaseService):
     """Habit tracking microservice with CrewAI integration"""
     
-    def __init__(self, habit_tracker: HabitTracker, user_id: str):
-        super().__init__("habit_tracker", habit_tracker, user_id)
+    def __init__(self, habit_tracker, HabitTracker, user_id: str):
+        super().__init__("habit_tracker", HabitTracker, user_id)
         self.priority = 5  # Lower priority - broader triggers
     
     def get_command_triggers(self) -> List[str]:
